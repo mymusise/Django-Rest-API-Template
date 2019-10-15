@@ -17,6 +17,8 @@ class BaseView(GenericExceptionMixin, GenericAPIView):
         'PUT': None,
         'DELETE': None
     }
+    # need authentication
+    _ignore_model_permissions = False
 
     def print_logger(self, request):
         parameters = getattr(request, request.method, {})
