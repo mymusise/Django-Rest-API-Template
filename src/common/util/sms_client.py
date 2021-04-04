@@ -1,6 +1,5 @@
 from alibabacloud_dysmsapi20170525 import models as dysmsapi_20170525_models
-from alibabacloud_dysmsapi20170525.client import \
-    Client as Dysmsapi20170525Client
+from alibabacloud_dysmsapi20170525.client import Client as Dysmsapi20170525Client
 from alibabacloud_tea_openapi import models as open_api_models
 import os
 
@@ -27,13 +26,13 @@ class SmsClient:
         # 您的AccessKey Secret
         config.access_key_secret = access_key_secret
         # 访问的域名
-        config.endpoint = 'dysmsapi.aliyuncs.com'
+        config.endpoint = "dysmsapi.aliyuncs.com"
         return Dysmsapi20170525Client(config)
 
     def send(self, phone_num, code, param):
         send_sms_request = dysmsapi_20170525_models.SendSmsRequest(
             phone_numbers=phone_num,
-            sign_name=os.environ.get('ALIYUN_SMS_SIGN_NAME', ''),
+            sign_name=os.environ.get("ALIYUN_SMS_SIGN_NAME", ""),
             template_code=code,
             template_param=param,
         )

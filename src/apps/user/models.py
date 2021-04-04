@@ -9,8 +9,7 @@ class ROLES:
 
 class UserInfoMixin(models.Model):
     telephone = models.CharField(max_length=64, verbose_name="手机号", unique=True)
-    remark = models.CharField(null=True, blank=True,
-                              max_length=255, verbose_name="备注")
+    remark = models.CharField(null=True, blank=True, max_length=255, verbose_name="备注")
 
     class Meta:
         abstract = True
@@ -23,9 +22,9 @@ class User(AbstractUser, UserInfoMixin):
 
     @property
     def roles(self):
-        if hasattr(self, '_roles'):
+        if hasattr(self, "_roles"):
             return self._roles
-        names = self.groups.all().values_list('name')
+        names = self.groups.all().values_list("name")
         names = list(map(lambda x: x[0], names))
         self._roles = names
         return self._roles

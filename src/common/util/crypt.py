@@ -3,7 +3,7 @@ All thing about crypt and decrypt
 """
 
 
-EASY_IDENTIFIED_ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz'
+EASY_IDENTIFIED_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz"
 
 
 def basex_encode(num, alphabet=EASY_IDENTIFIED_ALPHABET):
@@ -12,7 +12,7 @@ def basex_encode(num, alphabet=EASY_IDENTIFIED_ALPHABET):
     `num`: The number to encode
     `alphabet`: The alphabet to use for encoding
     """
-    assert(num >= 0)
+    assert num >= 0
     if num == 0:
         return alphabet[0]
     arr = []
@@ -22,7 +22,7 @@ def basex_encode(num, alphabet=EASY_IDENTIFIED_ALPHABET):
         num //= base
         arr.append(alphabet[rem])
     arr.reverse()
-    return ''.join(arr)
+    return "".join(arr)
 
 
 def basex_decode(string, alphabet=EASY_IDENTIFIED_ALPHABET):
@@ -38,9 +38,8 @@ def basex_decode(string, alphabet=EASY_IDENTIFIED_ALPHABET):
 
     idx = 0
     for char in string:
-        power = (strlen - (idx + 1))
+        power = strlen - (idx + 1)
         num += alphabet.index(char) * (base ** power)
         idx += 1
 
     return num
-

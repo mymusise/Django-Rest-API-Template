@@ -11,7 +11,8 @@ class Id40Generator:
 
     def __init__(self, date_str, alphabet=None):
         self.since = time.mktime(
-            datetime.datetime.strptime(date_str, '%Y-%m-%d').timetuple())
+            datetime.datetime.strptime(date_str, "%Y-%m-%d").timetuple()
+        )
         if alphabet:
             self.alphabet = alphabet
         else:
@@ -25,16 +26,16 @@ class Id40Generator:
         return time_since
 
     def gen_id(self, timestamp=None):
-        return basex_encode((self.__time_since(timestamp) << 9)
-                            + random.SystemRandom().getrandbits(9),
-                            self.alphabet)
+        return basex_encode(
+            (self.__time_since(timestamp) << 9) + random.SystemRandom().getrandbits(9),
+            self.alphabet,
+        )
 
 
 class RandomStringGenerator:
-
     def __init__(self, length, alphabet=string.ascii_uppercase):
         self.length = length
         self.alphabet = alphabet
 
     def gen_id(self):
-        return ''.join(random.choices(self.alphabet, k=self.length))
+        return "".join(random.choices(self.alphabet, k=self.length))

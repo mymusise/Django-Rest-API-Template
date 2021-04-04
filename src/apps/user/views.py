@@ -13,32 +13,35 @@ from server.exception import ObjectNotFoundException
 
 
 class TokenView(ObtainAuthToken):
-
-    @swagger_auto_schema(operation_description='登录获取Token',
-                         responses={
-                             201: openapi.Response("返回用户Token, ID, 以及其权限: ", TokenResponseSerializer
-                                                   )
-                         })
+    @swagger_auto_schema(
+        operation_description="登录获取Token",
+        responses={
+            201: openapi.Response("返回用户Token, ID, 以及其权限: ", TokenResponseSerializer)
+        },
+    )
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
+        user = serializer.validated_data["user"]
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'username': user.username,
-            'user_id': user.pk,
-            'roles': user.roles
-        })
+        return Response(
+            {
+                "token": token.key,
+                "username": user.username,
+                "user_id": user.pk,
+                "roles": user.roles,
+            }
+        )
 
 
 class UserFilter(FilterSet):
-    role = CharFilter(required=False, method='role_filter', label='role')
+    role = CharFilter(required=False, method="role_filter", label="role")
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'role']
+        fields = ["id", "username", "role"]
 
     def role_filter(self, queryset, name, value):
         if value == ROLES.TEACHER:
@@ -55,24 +58,26 @@ class UserView(NoPaginationViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
-        user_id = serializer.data.get('id')
+        user_id = serializer.data.get("id")
         user = User.objects.get(id=user_id)
         user.set_password(user.telephone)
-        user.save(update_fields=['password'])
+        user.save(update_fields=["password"])
 
 
 class SMSLoginView(APIView):
     serializer_class = SMSLoginSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
-        phone_num = serializer.validated_data['phone_num']
-        code = serializer.validated_data['code']
+        phone_num = serializer.validated_data["phone_num"]
+        code = serializer.validated_data["code"]
 
         sms = SMS.objects.filter(
-            phone_num=phone_num, code=code, purpose=SMS.Purpose.SIGN_IN).first()
+            phone_num=phone_num, code=code, purpose=SMS.Purpose.SIGN_IN
+        ).first()
 
         if sms is None:
             raise ObjectNotFoundException("验证码错误")
@@ -83,9 +88,11 @@ class SMSLoginView(APIView):
         sms.set_used()
         user, _ = User.objects.get_or_create(telephone=phone_num)
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'username': user.username,
-            'user_id': user.pk,
-            'roles': user.roles
-        })
+        return Response(
+            {
+                "token": token.key,
+                "username": user.username,
+                "user_id": user.pk,
+                "roles": user.roles,
+            }
+        )

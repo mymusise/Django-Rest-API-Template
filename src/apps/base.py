@@ -31,15 +31,14 @@ class LogicDeleteMixin(object):
     def logic_delete(self):
         self.is_deleted = True
         self.deleted_at = datetime.datetime.now()
-        self.save(update_fields=['is_deleted', 'deleted_at'])
+        self.save(update_fields=["is_deleted", "deleted_at"])
 
     def logic_restore(self):
         self.is_deleted = False
-        self.save(update_fields=['is_deleted'])
+        self.save(update_fields=["is_deleted"])
 
 
 class NoDeleteModalAdmin(ModelAdmin):
-
     def has_delete_permission(self, request, *args, **kwargs):
         return False
 
@@ -50,38 +49,40 @@ class PagePagination(PageNumberPagination):
 
 class FullDjangoModelPermissions(permissions.DjangoModelPermissions):
     perms_map = {
-        'GET': ['%(app_label)s.view_%(model_name)s'],
-        'OPTIONS': ['%(app_label)s.view_%(model_name)s'],
-        'HEAD': [],
-        'POST': ['%(app_label)s.add_%(model_name)s'],
-        'PUT': ['%(app_label)s.change_%(model_name)s'],
-        'PATCH': ['%(app_label)s.change_%(model_name)s'],
-        'DELETE': ['%(app_label)s.delete_%(model_name)s'],
+        "GET": ["%(app_label)s.view_%(model_name)s"],
+        "OPTIONS": ["%(app_label)s.view_%(model_name)s"],
+        "HEAD": [],
+        "POST": ["%(app_label)s.add_%(model_name)s"],
+        "PUT": ["%(app_label)s.change_%(model_name)s"],
+        "PATCH": ["%(app_label)s.change_%(model_name)s"],
+        "DELETE": ["%(app_label)s.delete_%(model_name)s"],
     }
 
 
 class BaseModelViewSet(ModelViewSet):
     pagination_class = PagePagination
     swagger_schema = SwaggerAutoSchema
-    filter_backends = [filters.SearchFilter,
-                       DjangoFilterBackend, filters.OrderingFilter]
+    filter_backends = [
+        filters.SearchFilter,
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+    ]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
-    permission_classes = [permissions.IsAuthenticated,
-                          FullDjangoModelPermissions]
+    permission_classes = [permissions.IsAuthenticated, FullDjangoModelPermissions]
 
     def perform_destroy(self, instance):
-        if getattr(instance, 'logic_delete'):
+        if getattr(instance, "logic_delete"):
             instance.logic_delete()
 
     def initialize_request(self, request, *args, **kwargs):
         request = super(BaseModelViewSet, self).initialize_request(
-            request, *args, **kwargs)
+            request, *args, **kwargs
+        )
         APILogMiddleware.log_request(request)
         return request
 
 
 class NoPagePagination(PagePagination):
-
     def paginate_queryset(self, queryset, request, view=None):
         """
         Paginate a queryset if required, either returning a
@@ -95,4 +96,3 @@ class NoPagePagination(PagePagination):
 
 class NoPaginationViewSet(ModelViewSet):
     pagination_class = NoPagePagination
-

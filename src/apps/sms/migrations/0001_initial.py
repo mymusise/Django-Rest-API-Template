@@ -8,20 +8,19 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='SMS',
+            name="SMS",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('phone_num', models.CharField(max_length=32)),
-                ('code', models.CharField(max_length=16)),
-                ('purpose', models.CharField(max_length=32)),
-                ('is_used', models.BooleanField()),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(blank=True, null=True)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("phone_num", models.CharField(max_length=32)),
+                ("code", models.CharField(max_length=16)),
+                ("purpose", models.CharField(max_length=32)),
+                ("is_used", models.BooleanField()),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(blank=True, null=True)),
             ],
         ),
     ]

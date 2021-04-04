@@ -20,7 +20,7 @@ def format_ValidationError(exc):
             error_detail = error_messages
         for message_item in error_detail:
             messages.append(f"{key}:{message_item.get('message')}")
-    full_error_message = ' '.join(messages)
+    full_error_message = " ".join(messages)
     return full_error_message
 
 
@@ -29,18 +29,15 @@ def custom_exception_handler(exc, context):
 
     # custom exception processing
     if response is None:
-        response = Response({'detail': str(exc)})
+        response = Response({"detail": str(exc)})
     if isinstance(exc, exceptions.APIException):
         if isinstance(exc, exceptions.ValidationError):
             detail = format_ValidationError(exc)
-            response.data = {
-                'detail': detail,
-                'code': 'ValidationError'
-            }
+            response.data = {"detail": detail, "code": "ValidationError"}
         else:
             response.data = {
-                'detail': str(exc),
-                'code': exc.detail.code,
+                "detail": str(exc),
+                "code": exc.detail.code,
             }
     else:
         exception_logger.exception(exc)

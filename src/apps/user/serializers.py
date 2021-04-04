@@ -14,10 +14,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'telephone', 'remark', 'date_joined', 'role')
+        fields = ("id", "username", "telephone", "remark", "date_joined", "role")
 
     def create(self, validated_data):
-        role = validated_data.pop('role') if 'role' in validated_data else None
+        role = validated_data.pop("role") if "role" in validated_data else None
         instance = super(UserSerializer, self).create(validated_data)
         if role == ROLES.TEACHER:
             instance.being_teacher()

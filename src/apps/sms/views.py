@@ -17,11 +17,11 @@ class SendSMSView(APIView):
         serializer = SendSmsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        phone_num = serializer.validated_data['phone_num']
-        purpose = serializer.validated_data['purpose']
+        phone_num = serializer.validated_data["phone_num"]
+        purpose = serializer.validated_data["purpose"]
 
         if purpose not in (SMS.Purpose.all()):
-            raise APIException('非法操作')
+            raise APIException("非法操作")
 
         elif purpose == SMS.Purpose.SIGN_IN:
             pass
@@ -29,14 +29,14 @@ class SendSMSView(APIView):
         try:
             sms = SMS.create(phone_num=phone_num, purpose=purpose)
         except SMS.IntervalTooShortException:
-            raise BizException('请稍后再试', 'SMS.IntervalTooShort')
+            raise BizException("请稍后再试", "SMS.IntervalTooShort")
 
         sms_client = SmsClient(
-            os.environ.get('ALIYUN_SMS_ACCESS_KEY', ''),
-            os.environ.get('ALIYUN_SMS_ACCESS_KEY_SECRET', ''),
+            os.environ.get("ALIYUN_SMS_ACCESS_KEY", ""),
+            os.environ.get("ALIYUN_SMS_ACCESS_KEY_SECRET", ""),
         )
 
         param = json.dumps({"code": sms.code})
-        sms_client.send(phone_num, 'SMS_101195030', param)
+        sms_client.send(phone_num, "SMS_101195030", param)
 
         return Response({})
