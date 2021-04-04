@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  web:
+    build: 
+      context: .
+    command: gunicorn -w 2 server.wsgi -b 0.0.0.0:8002 --timeout 300
+    volumes:
+      - ./src/:/app/
+      - ./logs/:/logs/
+    environment:
+        - DEBUG=False
+    network_mode: "host"
+    restart: always

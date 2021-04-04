@@ -1,6 +1,0 @@
-django
-django-cors-headers
-djangorestframework-jwt
-djangorestframework
-django-log-request-id
-django-ratelimit==1.1.0
