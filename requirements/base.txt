@@ -5,7 +5,7 @@ django-better-admin-arrayfield==1.4.2
 PyJWT==2.0.1
 
 celery==5.2.2
-redis==3.5.3
+redis==4.5.3
 python-dotenv==0.15.0
 
 drf-yasg==1.20.0
